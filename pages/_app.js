@@ -10,6 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import StickyFooter from "../components/Footer/Footer";
 import { Box } from "@material-ui/core";
 import Header from "../components/Header/Header";
+import NextNProgress from "nextjs-progressbar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,7 +46,9 @@ export default function MyApp(props) {
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         <Provider store={store}>
+          <NextNProgress options={{ showSpinner: false }} />
           <Header />
+
           <Box className={classes.root}>
             <Component {...pageProps} />
           </Box>

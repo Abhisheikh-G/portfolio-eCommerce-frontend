@@ -9,7 +9,7 @@ function Copyright() {
     <Typography variant="body1" align="center">
       {"Copyright © "}
       <Link color="inherit" href="https://abhisheikhgill.com/">
-        Abhisheikh Gill
+        ProShop
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3, 2),
     marginTop: "auto",
     backgroundColor: theme.palette.primary.dark,
-    color: theme.palette.primary.contrastText,
+    color: theme.palette.common.white,
   },
 }));
 

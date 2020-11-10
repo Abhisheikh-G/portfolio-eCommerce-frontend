@@ -3,7 +3,9 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import Link from "next/link";
 import { startClock } from "../redux/actions";
-import Examples from "../components/Examples";
+import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
+import Home from "../components/Home/Home";
 
 const Index = () => {
   const dispatch = useDispatch();
@@ -13,11 +15,9 @@ const Index = () => {
 
   return (
     <>
-      <h1>Next.js starter with Material-UI and Redux</h1>
-      <Examples />
-      <Link href="/show-redux-state">
-        <a>Click to see current Redux State</a>
-      </Link>
+      <Container maxWidth="lg">
+        <Home />
+      </Container>
     </>
   );
 };
