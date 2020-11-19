@@ -1,9 +1,11 @@
 import { Grid, Typography } from "@material-ui/core";
 import React from "react";
-import products from "../../src/products";
 import Product from "../Product/Product";
+import Message from "../Message/Message";
+import Loader from "../Loader/Loader";
+import { useSelector } from "react-redux";
 
-const Home = () => {
+const Home = ({ products }) => {
   return (
     <>
       <Typography variant="h3" component="h6">

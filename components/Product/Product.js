@@ -25,7 +25,7 @@ const Product = ({ product }) => {
   const classes = useStyles();
   return (
     <Card className={classes.root}>
-      <Link href={`/products/${product._id}`}>
+      <Link href={`/products/${product._id}`} alt={`${product.name}`}>
         <Image height={250} width={345} src={`${product.image}`} />
       </Link>
       <CardContent>
@@ -42,7 +42,12 @@ const Product = ({ product }) => {
       >
         <Typography variant="h6">Product Reviews</Typography>
         <Box display="flex" justifyContent="space-around">
-          <Rating name="read-only" value={product.rating} readOnly />
+          <Rating
+            name="read-only"
+            value={product.rating}
+            name="Product Rating"
+            readOnly
+          />
           <Typography variant="body1" display="inline">
             from {product.numReviews} reviews
           </Typography>

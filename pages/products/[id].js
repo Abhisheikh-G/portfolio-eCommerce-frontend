@@ -6,19 +6,30 @@ import {
   ListItem,
   Button,
   Grid,
+  FormControl,
+  Select,
+  MenuItem,
 } from "@material-ui/core";
 import Link from "../../src/Link";
 import Rating from "@material-ui/lab/Rating";
-import products from "../../src/products";
+// import products from "../../src/products";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import BackArrow from "@material-ui/icons/ArrowBack";
 import Box from "@material-ui/core/Box";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
+import axios from "axios";
+import { ViewArraySharp } from "@material-ui/icons";
 
 const Product = (props) => {
   const { product } = props;
+  const [qty, setQty] = useState(0);
+
+  const handleChange = (event) => {
+    setQty(event.target.value);
+  };
+
   return (
     <Container maxWidth="lg">
       <Box display="flex" alignItems="center">
@@ -36,7 +47,7 @@ const Product = (props) => {
 
       <Box
         mt={2}
-        mb={8}
+        pb={8}
         display="flex"
         minHeight="70vh"
         alignItems="center"
@@ -54,12 +65,14 @@ const Product = (props) => {
 
           <Grid item md={4} style={{ marginTop: "1em" }}>
             <Box maxWidth={350}>
-              <Typography variant="h4" color="initial">
-                {product.name}
-              </Typography>
+              <Typography variant="h4">{product.name}</Typography>
               <Divider />
               <Box my={1}>
-                <Rating value={product.rating} />{" "}
+                <Rating
+                  value={product.rating}
+                  readOnly
+                  name="Product Ratings"
+                />{" "}
                 <Typography display="inline" variant="body1">
                   {product.numReviews} reviews
                 </Typography>
@@ -84,10 +97,10 @@ const Product = (props) => {
                 marginTop: "1em",
               }}
             >
-              <Typography variant="h6" component="span" display="inline-block">
+              <Typography variant="h6" component="span">
                 Price:
               </Typography>
-              <Typography variant="h6" component="span" display="inline-block">
+              <Typography variant="h6" component="span">
                 ${product.price}
               </Typography>
             </Grid>
@@ -101,18 +114,43 @@ const Product = (props) => {
                 marginTop: "1em",
               }}
             >
-              <Typography variant="h6" component="span" display="inline-block">
-                Quantity:
+              <Typography variant="h6" component="span">
+                In Stock:
               </Typography>
-              <Typography variant="h6" component="span" display="inline-block">
+              <Typography variant="h6" component="span">
                 {product.countInStock}
               </Typography>
+            </Grid>
+            <Divider />
+            <Grid
+              item
+              container
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginTop: "1em",
+              }}
+            >
+              <Typography variant="h6">Quantity:</Typography>
+              <FormControl>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={qty + 1}
+                  fullWidth={true}
+                  onChange={handleChange}
+                >
+                  {[...Array(product.countInStock).keys()].map((q) => (
+                    <MenuItem value={q + 1}>{q + 1}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Grid>
             <Divider />
             <Grid item style={{ marginTop: "1em" }}>
               <Button
                 disabled={product.countInStock === 0}
-                fullWidth
+                fullWidth={true}
                 variant="outlined"
               >
                 Add To Cart
@@ -128,19 +166,21 @@ const Product = (props) => {
 export default Product;
 
 export const getStaticProps = async (context) => {
-  const foundProduct = products.filter(
-    (product) => product._id === context.params.id
+  const res = await fetch(
+    `http://localhost:5000/api/products/${context.params.id}`
   );
+  const data = await res.json();
 
-  return { props: { product: foundProduct[0] } };
+  return { props: { product: data } };
 };
 
 // This function gets called at build time
 export const getStaticPaths = async () => {
   // Call an external API endpoint to get posts
-
+  const res = await fetch("http://localhost:5000/api/products");
+  const data = await res.json();
   // Get the paths we want to pre-render based on products
-  const paths = products.map((product) => ({
+  const paths = data.map((product) => ({
     params: { id: product._id },
   }));
 

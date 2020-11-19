@@ -22,8 +22,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MyApp(props) {
   const { Component, pageProps } = props;
-  const store = useStore(pageProps.initialReduxState);
+
   const classes = useStyles();
+
+  const store = useStore();
 
   React.useEffect(() => {
     // Remove the server-side injected CSS.

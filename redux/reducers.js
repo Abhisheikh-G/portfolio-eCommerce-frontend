@@ -1,4 +1,6 @@
 import { combineReducers } from "redux";
+import { productListReducer } from "./reducers/productReducers";
+import { cartReducer } from "./reducers/cartReducers";
 import * as types from "./types";
 
 // COUNTER REDUCER
@@ -36,8 +38,8 @@ const timerReducer = (state = initialTimerState, { type, payload }) => {
 
 // COMBINED REDUCERS
 const reducers = {
-  counter: counterReducer,
-  timer: timerReducer,
+  productList: productListReducer,
+  cart: cartReducer,
 };
 
 export default combineReducers(reducers);

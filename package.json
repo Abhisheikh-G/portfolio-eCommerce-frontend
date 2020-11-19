@@ -6,6 +6,7 @@
     "@material-ui/core": "latest",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
+    "axios": "^0.21.0",
     "clsx": "latest",
     "next": "latest",
     "nextjs-progressbar": "0.0.7",
@@ -18,7 +19,7 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "dev": "next",
+    "dev": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start",
     "post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest"

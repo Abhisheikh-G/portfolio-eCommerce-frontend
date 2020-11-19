@@ -90,15 +90,15 @@ export default function Header() {
         <AppBar position="static">
           <Toolbar classes={{ root: classes.toolbarBg }} disableGutters>
             <Container maxWidth="lg" className={classes.headerContainer}>
-              <Typography
-                variant="h2"
-                component={Link}
-                href="/"
-                className={clsx([classes.headerTitle, classes.link])}
-                gutterBottom={false}
-              >
-                ProShop
-              </Typography>
+              <Link href="/">
+                <Typography
+                  variant="h2"
+                  className={clsx([classes.headerTitle, classes.link])}
+                  gutterBottom={false}
+                >
+                  ProShop
+                </Typography>
+              </Link>
 
               <Tabs
                 className={classes.tabs}

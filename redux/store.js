@@ -35,8 +35,11 @@ export const initializeStore = (preloadedState) => {
 
   return _store;
 };
+const cartItemsFromLocalStorage = window.localStorage.getItem("cartItems")
+  ? JSON.parse(window.localStorage.getItem("cartItems"))
+  : [];
 
-export function useStore(initialState) {
+export function useStore(initialState = cartItemsFromLocalStorage) {
   const store = useMemo(() => initializeStore(initialState), [initialState]);
   return store;
 }
