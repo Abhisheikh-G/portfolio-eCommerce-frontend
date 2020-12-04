@@ -19,15 +19,22 @@ import BackArrow from "@material-ui/icons/ArrowBack";
 import Box from "@material-ui/core/Box";
 import React, { useState } from "react";
 import Image from "next/image";
-import axios from "axios";
-import { ViewArraySharp } from "@material-ui/icons";
+import { useRouter } from "next/router";
 
 const Product = (props) => {
-  const { product } = props;
-  const [qty, setQty] = useState(0);
+  const { product, id } = props;
+  const router = useRouter();
+  const [qty, setQty] = useState(1);
 
   const handleChange = (event) => {
     setQty(event.target.value);
+  };
+
+  const handleAddToCart = (event) => {
+    router.push({
+      pathname: "/cart",
+      query: { id, qty },
+    });
   };
 
   return (
@@ -136,7 +143,7 @@ const Product = (props) => {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={qty + 1}
+                  value={qty}
                   fullWidth={true}
                   onChange={handleChange}
                 >
@@ -152,6 +159,7 @@ const Product = (props) => {
                 disabled={product.countInStock === 0}
                 fullWidth={true}
                 variant="outlined"
+                onClick={handleAddToCart}
               >
                 Add To Cart
               </Button>
@@ -171,7 +179,7 @@ export const getStaticProps = async (context) => {
   );
   const data = await res.json();
 
-  return { props: { product: data } };
+  return { props: { product: data, id: context.params.id } };
 };
 
 // This function gets called at build time

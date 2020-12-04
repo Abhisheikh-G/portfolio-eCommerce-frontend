@@ -1,6 +1,14 @@
 import * as types from "../types";
 
-export const cartReducer = (state = { cartItems: [] }, { type, payload }) => {
+const cartItemsFromLocalStorage =
+  typeof window !== "undefined" && localStorage.getItem("cartItems")
+    ? JSON.parse(localStorage.getItem("cartItems"))
+    : [];
+
+export const cartReducer = (
+  state = { cartItems: cartItemsFromLocalStorage },
+  { type, payload }
+) => {
   switch (type) {
     case types.CART_ADD_ITEM:
       const item = payload;
@@ -17,7 +25,11 @@ export const cartReducer = (state = { cartItems: [] }, { type, payload }) => {
       } else {
         return { ...state, cartItems: [...state.cartItems, item] };
       }
-
+    case types.CART_REMOVE_ITEM:
+      return {
+        ...state,
+        cartItems: state.cartItems.filter((item) => item.product !== payload),
+      };
     default:
       return state;
   }

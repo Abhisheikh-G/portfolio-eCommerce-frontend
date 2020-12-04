@@ -2,7 +2,9 @@ import * as types from "../types";
 
 export const addToCart = (id, qty) => async (dispatch, getState) => {
   const res = await fetch(`http://localhost:5000/api/products/${id}`);
-  const data = res.json();
+  const data = await res.json();
+
+  console.log(data);
 
   dispatch({
     type: types.CART_ADD_ITEM,
@@ -16,8 +18,14 @@ export const addToCart = (id, qty) => async (dispatch, getState) => {
     },
   });
 
-  localStorage.setItem(
-    "cartItems",
-    JSON.stringify(getState().cart.cartItems())
-  );
+  localStorage.setItem("cartItems", JSON.stringify(getState().cart.cartItems));
+};
+
+export const removeFromCart = (id) => async (dispatch, getState) => {
+  dispatch({
+    type: types.CART_REMOVE_ITEM,
+    payload: id,
+  });
+
+  localStorage.setItem("cartItems", JSON.stringify(getState().cart.cartItems));
 };
