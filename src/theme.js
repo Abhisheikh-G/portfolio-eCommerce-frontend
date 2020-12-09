@@ -13,12 +13,10 @@ let theme = createMuiTheme({
     error: {
       main: red.A400,
     },
-    background: {
-      default: "#fff",
-    },
   },
 });
 
+theme.palette.background = theme.palette.common.white;
 theme = responsiveFontSizes(theme);
 
 export default theme;

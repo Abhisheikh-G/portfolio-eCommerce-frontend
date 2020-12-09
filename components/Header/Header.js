@@ -14,7 +14,6 @@ import MailIcon from "@material-ui/icons/Mail";
 import WorkIcon from "@material-ui/icons/Work";
 import Container from "@material-ui/core/Container";
 import clsx from "clsx";
-import Image from "next/image";
 import {
   Box,
   Typography,
@@ -23,8 +22,13 @@ import {
   Hidden,
   Badge,
   IconButton,
+  Menu,
+  MenuItem,
+  Button,
 } from "@material-ui/core";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCartOutlined";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../redux/actions/userActions";
 
 function a11yProps(index) {
   return {
@@ -34,9 +38,10 @@ function a11yProps(index) {
 }
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    marginBottom: theme.spacing(2),
+  root: {},
+  header: {
+    height: 100,
+    justifyContent: "center",
   },
   list: {
     width: 240,
@@ -65,6 +70,13 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "auto",
     color: theme.palette.common.white,
   },
+  li: {
+    backgroundColor: theme.palette.common.white,
+  },
+  menu: {
+    marginTop: "2.1rem",
+    marginLeft: ".5rem",
+  },
 }));
 
 const StyledBadge = withStyles((theme) => ({
@@ -79,15 +91,31 @@ const StyledBadge = withStyles((theme) => ({
 export default function Header() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const { userInfo } = useSelector((state) => state.userLogin);
+  const dispatch = useDispatch();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+    handleClose();
+  };
+
   return (
     <React.Fragment>
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar position="static" className={classes.header}>
           <Toolbar classes={{ root: classes.toolbarBg }} disableGutters>
             <Container maxWidth="lg" className={classes.headerContainer}>
               <Link href="/">
@@ -107,14 +135,40 @@ export default function Header() {
                 aria-label="simple tabs example"
                 indicatorColor="primary"
               >
-                <Tab
-                  className={classes.link}
-                  component={Link}
-                  href="/signin"
-                  label="Sign In"
-                  {...a11yProps(0)}
-                />
+                {userInfo ? (
+                  <Tab
+                    aria-controls="simple-menu"
+                    aria-haspopup="true"
+                    label={`${userInfo.name}'s Profile`}
+                    onClick={handleClick}
+                  />
+                ) : (
+                  <Tab
+                    className={classes.link}
+                    component={Link}
+                    href="/signin"
+                    label="Sign In"
+                    {...a11yProps(0)}
+                  />
+                )}
 
+                <Menu
+                  id="simple-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  classes={{ list: classes.li }}
+                  open={anchorEl}
+                  className={classes.menu}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={handleClose}>
+                    <Link href="/profile">Profile</Link>
+                  </MenuItem>
+                  <MenuItem onClick={handleClose}>
+                    <Link href="/profile">Profile</Link>
+                  </MenuItem>
+                  <MenuItem onClick={handleLogout}>Sign Out</MenuItem>
+                </Menu>
                 <Link href="/cart">
                   <IconButton aria-label="cart" label="CART">
                     <StyledBadge badgeContent={4} color="secondary">

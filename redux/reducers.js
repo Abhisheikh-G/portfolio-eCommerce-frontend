@@ -1,6 +1,12 @@
 import { combineReducers } from "redux";
 import { productListReducer } from "./reducers/productReducers";
 import { cartReducer } from "./reducers/cartReducers";
+import {
+  userLoginReducer,
+  userRegisterReducer,
+  userDetailsReducer,
+  userUpdateProfileReducer,
+} from "./reducers/userReducers";
 import * as types from "./types";
 
 // COUNTER REDUCER
@@ -40,6 +46,10 @@ const timerReducer = (state = initialTimerState, { type, payload }) => {
 const reducers = {
   productList: productListReducer,
   cart: cartReducer,
+  userLogin: userLoginReducer,
+  userRegister: userRegisterReducer,
+  userDetails: userDetailsReducer,
+  userUpdateProfile: userUpdateProfileReducer,
 };
 
 export default combineReducers(reducers);

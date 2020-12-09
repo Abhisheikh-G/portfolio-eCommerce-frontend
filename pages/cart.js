@@ -37,6 +37,7 @@ const Cart = (props) => {
   const { cartItems } = cart;
   const classes = useStyles();
   const router = useRouter();
+  const { userInfo } = useSelector((state) => state.userLogin);
 
   useEffect(() => {
     if (id) {
@@ -54,7 +55,10 @@ const Cart = (props) => {
   };
 
   const handleCheckout = () => {
-    router.push(`/login?redirect=shipping`);
+    if (userInfo) router.push("/shipping");
+    else {
+      router.push(`/signin`);
+    }
   };
 
   return (
