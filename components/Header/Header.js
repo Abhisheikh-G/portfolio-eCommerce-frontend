@@ -112,6 +112,23 @@ export default function Header() {
     handleClose();
   };
 
+  const tabs = Array.of(
+    <Tab
+      className={classes.link}
+      component={Link}
+      href="/signup"
+      label="Sign Up"
+      {...a11yProps(0)}
+    />,
+    <Tab
+      className={classes.link}
+      component={Link}
+      href="/signin"
+      label="Sign In"
+      {...a11yProps(0)}
+    />
+  );
+
   return (
     <React.Fragment>
       <div className={classes.root}>
@@ -143,13 +160,7 @@ export default function Header() {
                     onClick={handleClick}
                   />
                 ) : (
-                  <Tab
-                    className={classes.link}
-                    component={Link}
-                    href="/signin"
-                    label="Sign In"
-                    {...a11yProps(0)}
-                  />
+                  tabs
                 )}
 
                 <Menu

@@ -5,7 +5,10 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-
+import FormLabel from "@material-ui/core/FormLabel";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Radio from "@material-ui/core/Radio";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -15,11 +18,11 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { saveShippingAddress } from "../redux/actions/cartActions";
+import { savePaymentMethod } from "../redux/actions/cartActions";
 import { useRouter } from "next/router";
 import stateData from "../public/data.json";
 import CheckoutStepper from "../components/CheckoutSteps/CheckoutStepper";
-import { FormControl, InputLabel, FormLabel } from "@material-ui/core";
+import { FormControl, InputLabel } from "@material-ui/core";
 
 function Copyright() {
   return (
@@ -57,105 +60,64 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Shipping = () => {
+const Payment = () => {
   const classes = useStyles();
   const { shippingAddress } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.userLogin);
   const dispatch = useDispatch();
   const router = useRouter();
-  const [city, setCity] = useState(shippingAddress.city);
-  const [state, setState] = useState(shippingAddress.state);
-  const [address, setAddress] = useState(shippingAddress.address);
-  const [postalCode, setPostalCode] = useState(shippingAddress.postalCode);
+  const [paymentMethod, setPaymentMethod] = useState("PayPal");
   const [message, setMessage] = useState("");
 
   useEffect(() => {
     if (!userInfo) {
       router.push("/signin");
     }
+    if (!shippingAddress) {
+      router.push("/shipping");
+    }
   }, [router, userInfo]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(saveShippingAddress({ address, city, state, postalCode }));
-    router.push("/payment");
+    dispatch(savePaymentMethod(paymentMethod));
+    router.push("/placeorder");
   };
 
   return (
     <>
       <Container maxWidth="sm" style={{ marginTop: "24px" }}>
-        <CheckoutStepper stepIndex={1} />
+        <CheckoutStepper stepIndex={2} />
       </Container>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
 
         <div className={classes.paper}>
-          <Box display="flex" width="100%" justifyContent="flex-start">
-            <FormLabel component="legend">Shipping Address</FormLabel>
-          </Box>
-
           <form className={classes.form} onSubmit={handleSubmit}>
             <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  autoComplete="address"
-                  name="address"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="address"
-                  label="Enter Address"
-                  autoFocus
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="city"
-                  label="Enter City"
-                  name="city"
-                  value={city}
-                  autoComplete="city"
-                  onChange={(e) => setCity(e.target.value)}
-                />
-              </Grid>
               <Grid item xs={6}>
-                <FormControl className={classes.formControl}>
-                  <InputLabel id="state">Select State</InputLabel>
-                  <Select
-                    required
-                    fullWidth
-                    id="state"
-                    value={state}
-                    onChange={(e) => setState(e.target.value)}
+                <FormControl component="fieldset">
+                  <Box mt={2} />
+                  <FormLabel component="legend">Payment Method</FormLabel>
+                  <RadioGroup
+                    aria-label="gender"
+                    name="gender1"
+                    value={paymentMethod}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
                   >
-                    {stateData.map((st) => (
-                      <MenuItem
-                        style={{ backgroundColor: "#fff" }}
-                        value={st.State}
-                      >
-                        {st.Code}
-                      </MenuItem>
-                    ))}
-                  </Select>
+                    <FormControlLabel
+                      value="PayPal"
+                      control={<Radio />}
+                      checked
+                      label="PayPal or Credit Card"
+                    />
+                    {/* <FormControlLabel
+                      value="CreditCard"
+                      control={<Radio />}
+                      label="Credit Card"
+                    /> */}
+                  </RadioGroup>
                 </FormControl>
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="postal"
-                  label="Enter Postal Code"
-                  name="postalCode"
-                  value={postalCode}
-                  autoComplete="pcode"
-                  onChange={(e) => setPostalCode(e.target.value)}
-                />
               </Grid>
 
               {message && (
@@ -182,4 +144,4 @@ const Shipping = () => {
   );
 };
 
-export default Shipping;
+export default Payment;
